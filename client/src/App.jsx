@@ -26,7 +26,7 @@ function App() {
         gap: "20px"
       }}
     >
-      <h1>Frontend Running </h1>
+      <h1>Frontend Running..... </h1>
 
       <button onClick={fetchMessage}>
         Fetch Backend Message
