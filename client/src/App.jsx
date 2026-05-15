@@ -27,6 +27,7 @@ function App() {
       }}
     >
       <h1>Frontend Running..... </h1>
+      <h2>Testing CI/Cd</h2>
 
       <button onClick={fetchMessage}>
         Fetch Backend Message
