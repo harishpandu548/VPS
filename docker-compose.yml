@@ -1,26 +1,71 @@
-version: "3.9"
+# version: "3.9"
+
+# services:
+#   server:
+#     build: ./server
+#     container_name: express-server
+#     # ports:
+#     #   - "5000:5000"
+#     networks:
+#       - fullstack-net
+#     restart: unless-stopped
+#   client:
+#     build: ./client
+#     container_name: react-client
+#     expose:
+#       - "3000"
+#     # ports:
+#     #   - "3000:3000"
+#     networks:
+#       - fullstack-net
+#     depends_on:
+#       - server
+#     restart: unless-stopped
+
+# # private LAN network between containers so containers can talk
+# networks:
+#   fullstack-net:
+#     driver: bridge
 
 services:
   server:
     build: ./server
     container_name: express-server
-    ports:
-      - "5000:5000"
+    # if not using nginx we expose ports so first 5000 is public vps port and second 5000 is backend container port 5000, the example is right above which got "#"
+    # we are using nginx so:
+    #     expose:
+    #       - "5000"
+    expose:
+      - "5000"
     networks:
       - fullstack-net
     restart: unless-stopped
+
   client:
     build: ./client
     container_name: react-client
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     networks:
       - fullstack-net
     depends_on:
       - server
     restart: unless-stopped
 
-# private LAN network between containers so containers can talk
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - client
+      - server
+    networks:
+      - fullstack-net
+    restart: unless-stopped
+
 networks:
   fullstack-net:
     driver: bridge
